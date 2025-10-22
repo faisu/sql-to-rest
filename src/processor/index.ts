@@ -2,6 +2,9 @@ import { parseQuery } from 'libpg-query'
 import { ParsingError, UnimplementedError, UnsupportedError, getParsingErrorHint } from '../errors'
 import { ParsedQuery, Stmt } from '../types/libpg-query'
 import { processSelectStatement } from './select'
+import { processInsertStatement } from './insert'
+import { processUpdateStatement } from './update'
+import { processDeleteStatement } from './delete'
 import { Statement } from './types'
 
 export { supportedAggregateFunctions } from './select'
@@ -51,11 +54,11 @@ function processStatement({ stmt }: Stmt): Statement {
   if ('SelectStmt' in stmt) {
     return processSelectStatement(stmt)
   } else if ('InsertStmt' in stmt) {
-    throw new UnimplementedError(`Insert statements are not yet implemented by the translator`)
+    return processInsertStatement(stmt)
   } else if ('UpdateStmt' in stmt) {
-    throw new UnimplementedError(`Update statements are not yet implemented by the translator`)
+    return processUpdateStatement(stmt)
   } else if ('DeleteStmt' in stmt) {
-    throw new UnimplementedError(`Delete statements are not yet implemented by the translator`)
+    return processDeleteStatement(stmt)
   } else if ('ExplainStmt' in stmt) {
     throw new UnimplementedError(`Explain statements are not yet implemented by the translator`)
   } else {

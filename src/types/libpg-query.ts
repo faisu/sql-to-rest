@@ -31,6 +31,12 @@ export type A_Const = {
           fval: string
         }
       }
+    | {
+        boolval: boolean
+      }
+    | {
+        Null: {}
+      }
   )
 }
 
@@ -211,19 +217,58 @@ export type SelectStmt = {
     limitCount?: A_Const
     limitOffset?: A_Const
     op: string
+    valuesLists?: List[]
   }
 }
 
 export type InsertStmt = {
-  InsertStmt: {}
+  InsertStmt: {
+    relation: {
+      relname: string
+      inh: boolean
+      relpersistence: string
+      location: number
+      schemaname?: string
+      alias?: { aliasname: string }
+    }
+    cols?: SelectResTarget[]
+    selectStmt?: SelectStmt
+    valuesLists?: List[]
+    returningList?: SelectResTarget[]
+    onConflictClause?: any
+    override?: string
+  }
 }
 
 export type UpdateStmt = {
-  UpdateStmt: {}
+  UpdateStmt: {
+    relation: {
+      relname: string
+      inh: boolean
+      relpersistence: string
+      location: number
+      schemaname?: string
+      alias?: { aliasname: string }
+    }
+    targetList: SelectResTarget[]
+    whereClause?: WhereExpression
+    returningList?: SelectResTarget[]
+  }
 }
 
 export type DeleteStmt = {
-  DeleteStmt: {}
+  DeleteStmt: {
+    relation: {
+      relname: string
+      inh: boolean
+      relpersistence: string
+      location: number
+      schemaname?: string
+      alias?: { aliasname: string }
+    }
+    whereClause?: WhereExpression
+    returningList?: SelectResTarget[]
+  }
 }
 
 export type ExplainStmt = {
