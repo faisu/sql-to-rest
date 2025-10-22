@@ -1,9 +1,10 @@
+import type { Plugin } from 'prettier'
 import * as babel from 'prettier/plugins/babel'
 import * as estree from 'prettier/plugins/estree'
 import * as prettier from 'prettier/standalone'
-import { RenderError } from '../errors'
+import { RenderError } from '../errors.js'
 import { Filter, Select, Insert, Update, Delete, Statement } from '../processor'
-import { renderNestedFilter, renderTargets } from './util'
+import { renderNestedFilter, renderTargets } from './util.js'
 
 export type SupabaseJsQuery = {
   code: string
@@ -34,8 +35,8 @@ async function formatSelect(select: Select): Promise<SupabaseJsQuery> {
 
     // Remove '*' from select() if it's the only target
     if (
-      firstTarget.type === 'column-target' &&
-      firstTarget.column === '*' &&
+      firstTarget!.type === 'column-target' &&
+      firstTarget!.column === '*' &&
       targets.length === 1
     ) {
       lines.push('.select()')
@@ -80,7 +81,7 @@ async function formatSelect(select: Select): Promise<SupabaseJsQuery> {
   // Join lines together and format
   const code = await prettier.format(lines.join('\n'), {
     parser: 'babel',
-    plugins: [babel, estree],
+    plugins: [babel, estree as Plugin],
     printWidth: 40,
     semi: false,
     singleQuote: true,
